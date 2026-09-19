@@ -6,9 +6,17 @@ project(Clipo
     LANGUAGES CXX
 )
 
+# ------------------------------------------------------------
+# C++ configuration
+# ------------------------------------------------------------
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# ------------------------------------------------------------
+# Qt configuration
+# ------------------------------------------------------------
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -20,9 +28,21 @@ find_package(Qt6 REQUIRED COMPONENTS
     Widgets
 )
 
+# ------------------------------------------------------------
+# Clipo executable
+# ------------------------------------------------------------
+
 add_executable(clipo
     src/main.cpp
+
+    # Clipboard module
+    src/clipboard/ClipboardManager.h
+    src/clipboard/ClipboardManager.cpp
 )
+
+# ------------------------------------------------------------
+# Qt libraries
+# ------------------------------------------------------------
 
 target_link_libraries(clipo PRIVATE
     Qt6::Core
@@ -30,14 +50,24 @@ target_link_libraries(clipo PRIVATE
     Qt6::Widgets
 )
 
+# ------------------------------------------------------------
+# Compiler configuration
+# ------------------------------------------------------------
+
 target_compile_features(clipo PRIVATE cxx_std_20)
 
 if(MSVC)
+
+    # Higher warning level for Microsoft Visual C++.
     target_compile_options(clipo PRIVATE /W4)
+
 else()
+
+    # Enable useful warnings on GCC and Clang.
     target_compile_options(clipo PRIVATE
         -Wall
         -Wextra
         -Wpedantic
     )
+
 endif()
