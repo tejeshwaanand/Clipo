@@ -27,6 +27,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     Gui
     Widgets
 )
+find_package(SQLite3 REQUIRED)
 
 # ------------------------------------------------------------
 # Clipo executable
@@ -38,6 +39,14 @@ add_executable(clipo
     # Clipboard module
     src/clipboard/ClipboardManager.h
     src/clipboard/ClipboardManager.cpp
+
+    # Database module
+    src/database/Database.h
+    src/database/Database.cpp
+
+    # UI module
+    src/ui/PopupWindow.h
+    src/ui/PopupWindow.cpp
 )
 
 # ------------------------------------------------------------
@@ -48,6 +57,7 @@ target_link_libraries(clipo PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Widgets
+    SQLite::SQLite3
 )
 
 # ------------------------------------------------------------

@@ -2,38 +2,86 @@
 #include <QDebug>
 
 #include "clipboard/ClipboardManager.h"
+#include "database/Database.h"
+#include "ui/PopupWindow.h"
 
 /**
- * @brief Entry point for the Clipo application.
+ * @brief Entry point for Clipo.
  *
- * At this stage, Clipo runs as a simple background Qt application
- * and monitors clipboard changes. The graphical popup will be
- * introduced in a later development stage.
+ * At this stage, the application initializes:
+ *
+ * - SQLite storage
+ * - Clipboard monitoring
+ * - Clipboard history popup
+ *
+ * Global keyboard shortcuts will be added in a later milestone.
  */
 int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
 
-    // ClipboardManager owns the clipboard monitoring logic.
-    // Keeping this logic outside main() makes the application
-    // easier to extend and test.
+    /*
+     * Set application metadata.
+     *
+     * Qt uses this information for platform-specific
+     * application data locations.
+     */
+    application.setApplicationName("Clipo");
+    application.setApplicationVersion("0.1.0");
+    application.setOrganizationName("Clipo");
+
+    // ---------------------------------------------------------
+    // Database
+    // ---------------------------------------------------------
+
+    Database database;
+
+    if (!database.initialize())
+    {
+
+        qCritical()
+            << "Failed to initialize Clipo database.";
+
+        return 1;
+    }
+    // ---------------------------------------------------------
+    // Popup UI
+    // ---------------------------------------------------------
+
+    PopupWindow popup(database);
+    // ---------------------------------------------------------
+    // Clipboard monitoring
+    // ---------------------------------------------------------
+
     ClipboardManager clipboardManager;
 
-    // For the first development milestone, print clipboard
-    // changes to the terminal.
-    //
-    // This will later be replaced/extended with the database
-    // storage layer.
     QObject::connect(
         &clipboardManager,
         &ClipboardManager::clipboardChanged,
-        [](const QString &text)
+        [&database, &popup](const QString &text)
         {
-            qDebug() << "Clipboard:" << text;
-        }
-    );
+            if (database.addEntry(text))
+            {
 
-    qDebug() << "Clipo started.";
+                qDebug()
+                    << "Clipboard saved:"
+                    << text;
+
+                popup.refreshHistory();
+            }
+        });
+
+    
+
+    /*
+     * For now we display the popup immediately.
+     *
+     * This is temporary.
+     *
+     * Later the popup will remain hidden and will only appear
+     * when the user presses Ctrl+Shift+V.
+     */
+    popup.showPopup();
 
     return application.exec();
 }
