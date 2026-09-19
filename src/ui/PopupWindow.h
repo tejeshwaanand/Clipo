@@ -190,6 +190,11 @@ private:
      */
     QPushButton *m_closeButton;
 
+    /**
+     * @brief Clears all clipboard history.
+     */
+    QPushButton *m_clearButton;
+
 
     /**
      * @brief Clipboard history search field.
@@ -201,6 +206,9 @@ private:
      * @brief Displays clipboard history entries.
      */
     ClipboardHistoryView *m_historyView;
+
+
+    
 
 
     /**

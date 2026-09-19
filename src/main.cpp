@@ -102,6 +102,24 @@ int main(int argc, char *argv[])
         settings
     );
 
+    /*
+    * =========================================================
+    * Live clipboard history refresh
+    * =========================================================
+    *
+    * ClipboardManager already stores the new clipboard content
+    * in the database.
+    *
+    * Notify PopupWindow as well so the visible history updates
+    * immediately without reopening the popup.
+    */
+    QObject::connect(
+        &clipboardManager,
+        &ClipboardManager::clipboardChanged,
+        &popup,
+        &PopupWindow::refreshHistory
+    );
+
 
     /*
     * =========================================================

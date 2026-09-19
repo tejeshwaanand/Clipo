@@ -28,6 +28,7 @@
 #include <QPushButton>
 #include <QScreen>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 
 
@@ -52,6 +53,7 @@ PopupWindow::PopupWindow(
       m_settingsButton(nullptr),
       m_minimizeButton(nullptr),
       m_closeButton(nullptr),
+      m_clearButton(nullptr),
       m_searchBox(nullptr),
       m_historyView(nullptr),
       m_dragOffset(),
@@ -685,6 +687,85 @@ void PopupWindow::setupUi()
     m_searchBox->setClearButtonEnabled(
         true
     );
+    // Create the Clear History button.
+    m_clearButton =
+        new QPushButton(
+            "Clear",
+            this
+        );
+
+    m_clearButton->setObjectName(
+        "ClearHistoryButton"
+    );
+
+    // Keep the Clear button compact.
+    m_clearButton->setFixedSize(
+        58,
+        32
+    );
+
+    m_clearButton->setToolTip(
+        "Clear clipboard history"
+    );
+    connect(
+        m_clearButton,
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            /*
+            * Ask for confirmation before deleting the complete
+            * clipboard history.
+            */
+            const QMessageBox::StandardButton result =
+                QMessageBox::question(
+                    this,
+                    "Clear Clipboard History",
+                    "Are you sure you want to clear all clipboard history?",
+                    QMessageBox::Yes | QMessageBox::No,
+                    QMessageBox::No
+                );
+
+            if (result != QMessageBox::Yes)
+            {
+                return;
+            }
+
+            /*
+            * Delete all entries from SQLite.
+            */
+            if (!m_database.clearHistory())
+            {
+                QMessageBox::warning(
+                    this,
+                    "Clear Failed",
+                    "Could not clear clipboard history."
+                );
+
+                return;
+            }
+
+            /*
+            * Refresh the UI so the deleted entries disappear
+            * immediately.
+            */
+            m_historyView->refresh();
+
+            /*
+            * Clear any active search text/filter.
+            */
+            m_searchBox->clear();
+
+            /*
+            * Return focus to the search field.
+            */
+            m_searchBox->setFocus();
+
+            qDebug()
+                << "Clipo:"
+                << "Clipboard history cleared.";
+        }
+    );
 
     /*
      * The search box receives keyboard input.
@@ -784,8 +865,36 @@ void PopupWindow::setupUi()
         m_header
     );
 
-    layout->addWidget(
+    /*
+    * ---------------------------------------------------------
+    * Search + Clear row
+    * ---------------------------------------------------------
+    */
+
+    auto *searchLayout =
+        new QHBoxLayout();
+
+    searchLayout->setSpacing(
+        6
+    );
+
+    searchLayout->setContentsMargins(
+        0,
+        0,
+        0,
+        0
+    );
+
+    searchLayout->addWidget(
         m_searchBox
+    );
+
+    searchLayout->addWidget(
+        m_clearButton
+    );
+
+    layout->addLayout(
+        searchLayout
     );
 
     layout->addWidget(

@@ -281,3 +281,26 @@ QToolTip {
 
     font-size: 12px;
 }
+
+
+QPushButton#ClearHistoryButton {
+    width: 58px;
+    height: 32px;
+
+    padding: 0px;
+
+    background: rgba(255, 255, 255, 25);
+    border: 1px solid rgba(255, 255, 255, 55);
+    border-radius: 7px;
+
+    color: rgba(255, 255, 255, 220);
+    font-size: 13px;
+}
+
+QPushButton#ClearHistoryButton:hover {
+    background: rgba(255, 255, 255, 40);
+}
+
+QPushButton#ClearHistoryButton:pressed {
+    background: rgba(255, 255, 255, 55);
+}
