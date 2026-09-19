@@ -1,87 +1,188 @@
 #include <QApplication>
 #include <QDebug>
 
-#include "clipboard/ClipboardManager.h"
+#include "settings/SettingsManager.h"
 #include "database/Database.h"
+#include "clipboard/ClipboardManager.h"
+#include "platform/GlobalShortcut.h"
 #include "ui/PopupWindow.h"
 
-/**
- * @brief Entry point for Clipo.
- *
- * At this stage, the application initializes:
- *
- * - SQLite storage
- * - Clipboard monitoring
- * - Clipboard history popup
- *
- * Global keyboard shortcuts will be added in a later milestone.
- */
+
 int main(int argc, char *argv[])
 {
-    QApplication application(argc, argv);
+    QApplication app(argc, argv);
 
     /*
-     * Set application metadata.
+     * =========================================================
+     * Application information
+     * =========================================================
      *
-     * Qt uses this information for platform-specific
-     * application data locations.
+     * QSettings uses the organization/application information
+     * to determine where settings should be stored.
      */
-    application.setApplicationName("Clipo");
-    application.setApplicationVersion("0.1.0");
-    application.setOrganizationName("Clipo");
+    app.setApplicationName("Clipo");
+    app.setApplicationVersion("0.1.0");
+    app.setOrganizationName("Clipo");
 
-    // ---------------------------------------------------------
-    // Database
-    // ---------------------------------------------------------
 
+    /*
+     * =========================================================
+     * Database
+     * =========================================================
+     *
+     * Initialize the local SQLite database.
+     *
+     * Clipo does not use a remote server. Clipboard history
+     * remains stored locally on the user's machine.
+     */
     Database database;
 
     if (!database.initialize())
     {
-
         qCritical()
-            << "Failed to initialize Clipo database.";
+            << "Clipo:"
+            << "Database initialization failed.";
 
         return 1;
     }
-    // ---------------------------------------------------------
-    // Popup UI
-    // ---------------------------------------------------------
 
-    PopupWindow popup(database);
-    // ---------------------------------------------------------
-    // Clipboard monitoring
-    // ---------------------------------------------------------
 
+    /*
+     * =========================================================
+     * Settings
+     * =========================================================
+     *
+     * SettingsManager handles user preferences such as:
+     *
+     *     - Theme
+     *     - Popup opacity
+     *     - Global shortcut
+     *     - Popup position
+     *
+     * The object is created here and passed by reference to
+     * PopupWindow.
+     */
+    SettingsManager settings;
+
+
+    /*
+     * =========================================================
+     * Clipboard monitoring
+     * =========================================================
+     *
+     * ClipboardManager listens for clipboard changes and
+     * notifies us whenever new text is copied.
+     */
     ClipboardManager clipboardManager;
 
     QObject::connect(
         &clipboardManager,
         &ClipboardManager::clipboardChanged,
-        [&database, &popup](const QString &text)
+        [&database](const QString &text)
         {
-            if (database.addEntry(text))
-            {
+            database.addEntry(text);
+        }
+    );
 
-                qDebug()
-                    << "Clipboard saved:"
-                    << text;
-
-                popup.refreshHistory();
-            }
-        });
-
-    
 
     /*
-     * For now we display the popup immediately.
+     * =========================================================
+     * Popup
+     * =========================================================
      *
-     * This is temporary.
+     * PopupWindow receives both:
      *
-     * Later the popup will remain hidden and will only appear
-     * when the user presses Ctrl+Shift+V.
+     *     1. Database
+     *     2. SettingsManager
+     *
+     * PopupWindow does not own either object.
      */
-    popup.showPopup();
+    PopupWindow popup(
+        database,
+        settings
+    );
 
-    return application.exec();
+
+    /*
+    * =========================================================
+    * Global shortcut
+    * =========================================================
+    *
+    * GlobalShortcut listens for the configured keyboard
+    * shortcut.
+    */
+    GlobalShortcut globalShortcut;
+
+
+    /*
+    * =========================================================
+    * Global shortcut activation
+    * =========================================================
+    *
+    * When the registered global shortcut is pressed,
+    * GlobalShortcut emits activated().
+    *
+    * This opens the Clipo popup.
+    */
+    QObject::connect(
+        &globalShortcut,
+        &GlobalShortcut::activated,
+        &popup,
+        &PopupWindow::showPopup
+    );
+
+
+    /*
+    * =========================================================
+    * Shortcut change
+    * =========================================================
+    *
+    * When the user changes the shortcut from Settings,
+    * unregister the old shortcut and register the new one.
+    */
+    QObject::connect(
+        &popup,
+        &PopupWindow::globalShortcutChanged,
+        &globalShortcut,
+        [&globalShortcut](const QString &shortcut)
+        {
+            if (!globalShortcut.setShortcut(shortcut))
+            {
+                qWarning()
+                    << "Clipo:"
+                    << "Could not set global shortcut:"
+                    << shortcut;
+            }
+        }
+    );
+
+
+    /*
+    * =========================================================
+    * Register global shortcut
+    * =========================================================
+    */
+    if (!globalShortcut.registerShortcut(
+            settings.globalShortcut()
+        ))
+    {
+        qWarning()
+            << "Clipo:"
+            << "Could not register global shortcut:"
+            << settings.globalShortcut();
+    }
+
+
+    /*
+     * =========================================================
+     * Start application
+     * =========================================================
+     *
+     * Clipo starts hidden.
+     *
+     * The user opens the popup using:
+     *
+     *     Ctrl + Shift + V
+     */
+    return app.exec();
 }

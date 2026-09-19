@@ -1,0 +1,283 @@
+/*
+ * =========================================================
+ * Clipo Dark Theme
+ * Modern / Clean / Soft Glass Aesthetic
+ * =========================================================
+ */
+
+
+/*
+ * ---------------------------------------------------------
+ * Main popup
+ * ---------------------------------------------------------
+ */
+QWidget#PopupWindow {
+    background: transparent;
+    border: none;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Header
+ * ---------------------------------------------------------
+ *
+ * The header is intentionally more opaque than the popup.
+ * This keeps the controls readable even with popup opacity.
+ */
+QWidget#PopupHeader {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(120, 110, 90, 60);
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Title
+ * ---------------------------------------------------------
+ */
+QLabel#PopupTitle {
+    background: transparent;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Header buttons
+ * ---------------------------------------------------------
+ */
+QPushButton#SettingsButton,
+QPushButton#MinimizeButton,
+QPushButton#CloseButton {
+    background: transparent;
+    border: none;
+
+    border-radius: 9px;
+
+    color: rgba(235, 238, 243, 205);
+
+    padding: 5px;
+}
+
+
+/*
+ * Settings
+ */
+QPushButton#SettingsButton {
+    font-size: 16px;
+}
+
+QPushButton#SettingsButton:hover {
+    background: rgba(255, 255, 255, 28);
+    color: #ffffff;
+}
+
+
+/*
+ * Minimize
+ */
+QPushButton#MinimizeButton {
+    font-size: 17px;
+}
+
+QPushButton#MinimizeButton:hover {
+    background: rgba(255, 255, 255, 28);
+    color: #ffffff;
+}
+
+
+/*
+ * Close
+ */
+QPushButton#CloseButton {
+    font-size: 17px;
+}
+
+QPushButton#CloseButton:hover {
+    background: rgba(220, 70, 70, 155);
+    color: #ffffff;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Search box
+ * ---------------------------------------------------------
+ */
+QLineEdit {
+    background: rgba(255, 255, 255, 22);
+
+    border: 1px solid rgba(255, 255, 255, 48);
+
+    border-radius: 12px;
+
+    padding: 10px 13px;
+
+    color: #f5f7fa;
+
+    selection-background-color: rgba(75, 145, 225, 90);
+
+    font-size: 14px;
+}
+
+
+QLineEdit:hover {
+    background: rgba(255, 255, 255, 28);
+
+    border: 1px solid rgba(255, 255, 255, 68);
+}
+
+
+QLineEdit:focus {
+    background: rgba(255, 255, 255, 32);
+
+    border: 1px solid rgba(100, 160, 230, 125);
+}
+
+
+QLineEdit::placeholder {
+    color: rgba(220, 225, 232, 135);
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Clipboard history
+ * ---------------------------------------------------------
+ */
+QListWidget {
+    background: transparent;
+
+    border: none;
+    outline: none;
+
+    color: #f1f3f6;
+
+    font-size: 14px;
+
+    padding: 2px;
+}
+
+
+/*
+ * Individual clipboard item
+ */
+QListWidget::item {
+    padding: 10px 13px;
+
+    border-radius: 10px;
+
+    margin: 2px 2px;
+}
+
+
+/*
+ * Hover
+ */
+QListWidget::item:hover {
+    background: rgba(255, 255, 255, 18);
+}
+
+
+/*
+ * Selected item
+ */
+QListWidget::item:selected {
+    background: rgba(75, 145, 225, 78);
+
+    color: #ffffff;
+}
+
+
+/*
+ * Selected but inactive
+ */
+QListWidget::item:selected:!active {
+    background: rgba(75, 145, 225, 60);
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Vertical scrollbar
+ * ---------------------------------------------------------
+ */
+QScrollBar:vertical {
+    width: 6px;
+
+    background: transparent;
+
+    margin: 2px 1px 2px 0;
+}
+
+
+QScrollBar::handle:vertical {
+    background: rgba(255, 255, 255, 65);
+
+    border-radius: 3px;
+
+    min-height: 28px;
+}
+
+
+QScrollBar::handle:vertical:hover {
+    background: rgba(255, 255, 255, 105);
+}
+
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Completely disable horizontal scrollbar
+ * ---------------------------------------------------------
+ */
+QScrollBar:horizontal {
+    height: 0px;
+
+    background: transparent;
+}
+
+
+QScrollBar::handle:horizontal {
+    height: 0px;
+
+    background: transparent;
+}
+
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+    height: 0px;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Tooltips
+ * ---------------------------------------------------------
+ */
+QToolTip {
+    background: rgba(20, 23, 28, 245);
+
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 30);
+
+    border-radius: 7px;
+
+    padding: 6px 8px;
+
+    font-size: 12px;
+}

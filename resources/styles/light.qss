@@ -1,0 +1,332 @@
+/*
+ * =========================================================
+ * Clipo Light Theme
+ * Warm / Minimal / Soft Glass
+ * =========================================================
+ *
+ * Design direction:
+ *
+ *   - Warm ivory background
+ *   - Soft cream surfaces
+ *   - Muted amber accent
+ *   - Deep navy text
+ *   - Very subtle borders
+ *   - Minimal visual noise
+ *
+ * The popup background itself is painted by PopupWindow.
+ * This stylesheet controls the widgets inside it.
+ */
+
+
+/*
+ * ---------------------------------------------------------
+ * Main popup
+ * ---------------------------------------------------------
+ */
+QWidget#PopupWindow {
+    background: transparent;
+    border: none;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Header
+ * ---------------------------------------------------------
+ *
+ * Slightly brighter than the main popup.
+ * This creates a subtle layered effect.
+ */
+QWidget#PopupHeader {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(120, 110, 90, 60);
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Title
+ * ---------------------------------------------------------
+ */
+QLabel#PopupTitle {
+    background: transparent;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+
+    color: #252936;
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Header buttons
+ * ---------------------------------------------------------
+ */
+QPushButton#SettingsButton,
+QPushButton#MinimizeButton,
+QPushButton#CloseButton {
+    background: transparent;
+
+    border: none;
+    border-radius: 9px;
+
+    color: rgba(55, 58, 66, 210);
+
+    padding: 5px;
+}
+
+
+/*
+ * Settings
+ */
+QPushButton#SettingsButton {
+    font-size: 16px;
+}
+
+QPushButton#SettingsButton:hover {
+    background: rgba(125, 95, 50, 32);
+
+    color: rgba(45, 42, 38, 255);
+}
+
+
+/*
+ * Minimize
+ */
+QPushButton#MinimizeButton {
+    font-size: 17px;
+}
+
+QPushButton#MinimizeButton:hover {
+    background: rgba(125, 95, 50, 32);
+
+    color: rgba(45, 42, 38, 255);
+}
+
+
+/*
+ * Close
+ */
+QPushButton#CloseButton {
+    font-size: 17px;
+}
+
+QPushButton#CloseButton:hover {
+    background: rgba(210, 75, 65, 155);
+
+    color: #ffffff;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Search box
+ * ---------------------------------------------------------
+ */
+QLineEdit {
+    background: rgba(255, 250, 242, 180);
+
+    border: 1px solid rgba(90, 70, 45, 38);
+
+    border-radius: 12px;
+
+    padding: 10px 13px;
+
+    color: #252936;
+
+    selection-background-color: rgba(205, 145, 55, 85);
+
+    font-size: 14px;
+}
+
+
+/*
+ * Search hover
+ */
+QLineEdit:hover {
+    background: rgba(255, 251, 245, 205);
+
+    border: 1px solid rgba(90, 70, 45, 58);
+}
+
+
+/*
+ * Search focus
+ */
+QLineEdit:focus {
+    background: rgba(255, 252, 247, 220);
+
+    border: 1px solid rgba(185, 125, 45, 105);
+}
+
+
+/*
+ * Placeholder
+ */
+QLineEdit::placeholder {
+    color: rgba(80, 76, 72, 145);
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Clipboard history
+ * ---------------------------------------------------------
+ */
+QListWidget {
+    background: transparent;
+
+    border: none;
+    outline: none;
+
+    color: #252936;
+
+    font-size: 14px;
+
+    padding: 3px;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Clipboard item
+ * ---------------------------------------------------------
+ *
+ * Individual items remain mostly transparent.
+ * This keeps the interface lightweight.
+ */
+QListWidget::item {
+    padding: 10px 13px;
+
+    border-radius: 10px;
+
+    margin: 2px 2px;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Item hover
+ * ---------------------------------------------------------
+ */
+QListWidget::item:hover {
+    background: rgba(255, 250, 242, 125);
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Selected item
+ * ---------------------------------------------------------
+ *
+ * Warm amber/cream instead of blue.
+ */
+QListWidget::item:selected {
+    background: rgba(238, 192, 118, 105);
+
+    color: #252936;
+}
+
+
+/*
+ * Selected item when list loses focus.
+ */
+QListWidget::item:selected:!active {
+    background: rgba(238, 192, 118, 75);
+
+    color: #252936;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Vertical scrollbar
+ * ---------------------------------------------------------
+ */
+QScrollBar:vertical {
+    width: 6px;
+
+    background: transparent;
+
+    margin: 3px 1px 3px 0;
+}
+
+
+/*
+ * Scrollbar handle
+ */
+QScrollBar::handle:vertical {
+    background: rgba(75, 68, 60, 75);
+
+    border-radius: 3px;
+
+    min-height: 28px;
+}
+
+
+/*
+ * Scrollbar hover
+ */
+QScrollBar::handle:vertical:hover {
+    background: rgba(75, 68, 60, 115);
+}
+
+
+/*
+ * Remove scrollbar arrows.
+ */
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Horizontal scrollbar
+ * ---------------------------------------------------------
+ *
+ * Clipo never displays a horizontal scrollbar.
+ */
+QScrollBar:horizontal {
+    height: 0px;
+
+    background: transparent;
+}
+
+QScrollBar::handle:horizontal {
+    height: 0px;
+
+    background: transparent;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+    height: 0px;
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * Tooltips
+ * ---------------------------------------------------------
+ */
+QToolTip {
+    background: rgba(42, 39, 35, 242);
+
+    color: #fffaf2;
+
+    border: 1px solid rgba(255, 255, 255, 25);
+
+    border-radius: 7px;
+
+    padding: 6px 8px;
+
+    font-size: 12px;
+}
