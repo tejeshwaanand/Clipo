@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+
+Name=Clipo
+GenericName=Clipboard Manager
+Comment=Fast and lightweight clipboard manager
+
+Exec=clipo
+Icon=clipo
+
+Terminal=false
+StartupNotify=false
+
+Categories=Utility;
+Keywords=clipboard;manager;productivity;

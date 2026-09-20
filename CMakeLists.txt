@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(Clipo
-    VERSION 0.1.0
+    VERSION 1.0.0
     DESCRIPTION "Fast and lightweight clipboard manager"
     LANGUAGES CXX
 )
@@ -168,10 +168,146 @@ else()
 
     target_compile_options(
         clipo PRIVATE
-
         -Wall
         -Wextra
         -Wpedantic
     )
 
 endif()
+
+
+# =========================================================
+# Installation
+#
+# These rules define where Clipo is installed on Linux.
+#
+# Executable:
+#     /usr/bin/clipo
+#
+# Desktop launcher:
+#     /usr/share/applications/clipo.desktop
+#
+# Application icon:
+#     /usr/share/icons/hicolor/512x512/apps/clipo.png
+#
+# =========================================================
+
+include(GNUInstallDirs)
+
+
+# ---------------------------------------------------------
+# Install executable
+# ---------------------------------------------------------
+
+install(
+    TARGETS clipo
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+
+# ---------------------------------------------------------
+# Install desktop launcher
+# ---------------------------------------------------------
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/packaging/clipo.desktop
+    DESTINATION
+        ${CMAKE_INSTALL_DATADIR}/applications
+)
+
+
+# ---------------------------------------------------------
+# Install application icon
+# ---------------------------------------------------------
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/resources/icons/clipo.png
+    DESTINATION
+        ${CMAKE_INSTALL_DATADIR}/icons/hicolor/512x512/apps
+)
+
+
+# =========================================================
+# CPack configuration
+#
+# CPack converts the CMake installation tree into a
+# distributable package.
+#
+# For Ubuntu/Debian we use the DEB generator.
+#
+# =========================================================
+
+set(CPACK_PACKAGE_NAME "clipo")
+
+set(CPACK_PACKAGE_VENDOR
+    "Clipo"
+)
+
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+    "Fast and lightweight clipboard manager"
+)
+
+set(CPACK_PACKAGE_DESCRIPTION
+    "Clipo is a fast, lightweight and local-first clipboard manager."
+)
+
+set(CPACK_PACKAGE_VERSION
+    ${PROJECT_VERSION}
+)
+
+set(CPACK_PACKAGE_CONTACT
+    "Clipo Project"
+)
+
+set(CPACK_RESOURCE_FILE_LICENSE
+    "${CMAKE_SOURCE_DIR}/LICENSE"
+)
+
+
+# =========================================================
+# Debian package settings
+# =========================================================
+
+set(CPACK_DEBIAN_PACKAGE_NAME
+    "clipo"
+)
+
+set(CPACK_DEBIAN_PACKAGE_VERSION
+    ${PROJECT_VERSION}
+)
+
+set(CPACK_DEBIAN_PACKAGE_SECTION
+    "utils"
+)
+
+set(CPACK_DEBIAN_PACKAGE_PRIORITY
+    "optional"
+)
+
+set(CPACK_DEBIAN_FILE_NAME
+    "clipo-${PROJECT_VERSION}-Linux-amd64.deb"
+)
+
+
+# ---------------------------------------------------------
+# Runtime dependencies
+#
+# These are runtime libraries, not development packages.
+# ---------------------------------------------------------
+
+set(CPACK_DEBIAN_PACKAGE_DEPENDS
+    "libqt6core6, libqt6gui6, libqt6widgets6, libsqlite3-0, libx11-6, libxtst6"
+)
+
+
+# =========================================================
+# Package generator
+# =========================================================
+
+set(CPACK_GENERATOR
+    "DEB"
+)
+
+include(CPack)
