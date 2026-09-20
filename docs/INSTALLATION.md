@@ -13,6 +13,9 @@ Clipo v1.0.0 currently targets:
 - 64-bit `amd64` systems
 - X11 desktop sessions
 
+The official Linux release package is built on Ubuntu 22.04 to provide
+a consistent compatibility baseline.
+
 Clipo requires the following runtime libraries:
 
 - Qt 6 Core
@@ -29,6 +32,8 @@ provided Debian package.
 
 Download the latest `.deb` package from the GitHub Releases page.
 
+The official Clipo v1.0.0 Linux package is built on Ubuntu 22.04.
+
 For Clipo v1.0.0:
 
 ```bash
@@ -37,6 +42,34 @@ sudo apt install ./clipo-1.0.0-Linux-amd64.deb
 
 Using `apt` allows Ubuntu/Debian to resolve the package's runtime
 dependencies.
+
+## Build and Install from Source
+
+Clipo can also be built directly from source.
+
+When building from source, Clipo is compiled against the Qt and other
+system libraries available on the build machine. Therefore, the
+resulting binary is intended for systems with compatible library
+versions.
+
+See [BUILDING.md](BUILDING.md) for complete build instructions.
+
+For a basic build:
+
+```bash
+cmake -S . -B build -G Ninja
+cmake --build build
+```
+
+Run the locally built application:
+
+```bash
+./build/clipo
+```
+
+The Ubuntu 22.04 release build environment is used for official
+release packages only. It is not required for normal development or
+local source builds.
 
 ## Start Clipo
 

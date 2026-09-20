@@ -15,6 +15,23 @@ Clipo is built using:
 - XTest
 - Git
 
+## Build Environment and Compatibility
+
+Clipo can be built from source on systems that provide the required
+development dependencies.
+
+When building from source, Clipo is linked against the Qt and other
+system libraries available on the build machine. Therefore, the resulting
+binary is intended for systems with compatible library versions.
+
+For the official Linux release package, Clipo is built in an Ubuntu 22.04
+environment. This provides a consistent baseline for the distributed
+Debian package and ensures compatibility with Ubuntu 22.04 and compatible
+newer systems.
+
+You do not need to use the official release build environment when
+developing or building Clipo for your own system.
+
 ## Install Build Dependencies
 
 On Ubuntu/Debian:
@@ -171,11 +188,91 @@ After building the application:
 cpack --config build/CPackConfig.cmake
 ```
 
-The generated package for version 1.0.0 is:
+The generated package will be:
+
+```text
+clipo-<version>-Linux-amd64.deb
+```
+
+For example, for version 1.0.0:
 
 ```text
 clipo-1.0.0-Linux-amd64.deb
 ```
+
+The generated package uses the libraries available in the build
+environment.
+
+For development or local testing, you can build the package directly
+on your own system.
+
+Official Clipo release packages are built using Ubuntu 22.04 as the
+release build environment to provide a consistent compatibility baseline.
+
+## Reproducible Linux Release Build
+
+Official Linux release packages are built using Ubuntu 22.04.
+
+The purpose of using a fixed Ubuntu version for release builds is to
+provide a consistent baseline for the compiled binary and its system
+library dependencies.
+
+A release build can be reproduced using an Ubuntu 22.04 environment,
+such as a Docker container.
+
+Example:
+
+```bash
+docker run --rm -it \
+    -v "$PWD:/workspace/Clipo" \
+    -w /workspace/Clipo \
+    ubuntu:22.04 \
+    bash
+```
+
+Inside the Ubuntu 22.04 environment, install the build dependencies
+listed above. The Qt/OpenGL development packages below may also be
+required by Qt6Gui:
+
+```bash
+apt update
+
+apt install -y \
+    git \
+    build-essential \
+    cmake \
+    ninja-build \
+    pkg-config \
+    qt6-base-dev \
+    qt6-tools-dev \
+    qt6-tools-dev-tools \
+    libsqlite3-dev \
+    libx11-dev \
+    libxtst-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    libegl1-mesa-dev \
+    libopengl-dev
+```
+
+Then build Clipo:
+
+```bash
+cmake -S . -B build-ubuntu22 -G Ninja
+cmake --build build-ubuntu22
+```
+
+Create the Debian package:
+
+```bash
+cpack --config build-ubuntu22/CPackConfig.cmake
+```
+
+This produces the Debian package using the Ubuntu 22.04 build
+environment.
+
+The Docker environment is not required for normal Clipo development
+or local source builds.
 
 ## Inspect the Debian Package
 
@@ -201,7 +298,15 @@ The package contains:
 
 ## Test the Debian Package
 
+A locally generated Debian package can be tested before release.
+
 Install the generated package:
+
+```bash
+sudo apt install ./clipo-<version>-Linux-amd64.deb
+```
+
+For version 1.0.0:
 
 ```bash
 sudo apt install ./clipo-1.0.0-Linux-amd64.deb
@@ -294,6 +399,9 @@ creating the release package.
 
 Release packages should not be committed to the source repository.
 
+Official Linux release packages are built using the documented
+Ubuntu 22.04 release build environment.
+
 The generated `.deb` file should be uploaded as an asset of the
 corresponding GitHub Release.
 
@@ -304,6 +412,10 @@ v1.0.0
 └── clipo-1.0.0-Linux-amd64.deb
 ```
 
+The official release package is intended to provide a consistent
+Linux compatibility baseline. Developers building Clipo from source
+may build directly on their own supported development environment.
+
 ## Build Artifacts
 
 The following directories/files are generated during development and
@@ -311,6 +423,7 @@ should not normally be committed to Git:
 
 ```text
 build/
+build-*/
 install-test/
 _CPack_Packages/
 *.deb
